@@ -13,19 +13,33 @@ defmodule FacebookMessenger do
 
   - `params`: Parameters sent from facebook
   """
-  def check_challenge(%{"hub.verify_token" => token,
-                        "hub.challenge" => challenge} = params) do
+  def check_challenge(%{"hub.mode" => in_mode,
+                        "hub.verify_token" => token,
+                        "hub.challenge" => in_challenge} = params) do
 
     Logger.info "token #{token}"
     Logger.info "verify_token #{verify_token}"
-
-    case token == verify_token do
-      true -> {:ok, challenge}
-      _ -> :error
+    mode = check_on_space(in_mode)
+    challenge = check_on_space(in_challenge)
+    case mode == "subscribe" do
+      true ->
+        case token == verify_token do
+          true -> {:ok, challenge}
+          _ -> :error
+        end
+      _-> :error
     end
   end
 
   def check_challenge(params), do: :error
+
+  defp check_on_space(string) do
+    case String.first(string) == " " do
+      true -> [new_string] = String.split(string)
+              new_string
+      _-> string
+    end
+  end
 
   @doc """
   Parse the payload sent from facebook and converts them to `FacebookMessenger.Response` structure
