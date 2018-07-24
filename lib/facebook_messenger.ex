@@ -13,8 +13,7 @@ defmodule FacebookMessenger do
 
   - `params`: Parameters sent from facebook
   """
-  def check_challenge(%{"hub.mode" => "subscribe",
-                        "hub.verify_token" => token,
+  def check_challenge(%{"hub.verify_token" => token,
                         "hub.challenge" => challenge} = params) do
 
     Logger.info "token #{token}"
