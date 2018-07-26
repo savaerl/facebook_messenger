@@ -42,11 +42,11 @@ defmodule FacebookMessenger.Sender do
   * :recepient - the recepient to send the message to
   * :body_lists - keyword lists
   """
-  @spec send_default(String.t, keyword()) :: HTTPotion.Response.t
-  def send_default(recepient, body_lists) do
+  @spec send_default(String.t, Map.t()) :: HTTPotion.Response.t
+  def send_default(recepient, body_map) do
     res = manager.post(
       url: url,
-      body: body_payload(recepient, body_lists) |> to_json
+      body: body_payload(recepient, body_map) |> to_json
     )
     Logger.info("response fro FB #{inspect(res)}")
     res
@@ -87,14 +87,10 @@ defmodule FacebookMessenger.Sender do
     }
   end
 
-  def body_payload(recepient, body_lists) do
+  def body_payload(recepient, body_map) do
     %{
       recipient: %{id: recepient},
-      message: %{
-        type:    "phone_number",
-        title:   "Number",
-        payload: "11111111111"
-      }
+      message: body_map
     }
   end
 
