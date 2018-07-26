@@ -37,6 +37,22 @@ defmodule FacebookMessenger.Sender do
   end
 
   @doc """
+  sends a default messages to the recipient
+
+  * :recepient - the recepient to send the message to
+  * :body_lists - keyword lists
+  """
+  @spec send_default(String.t, keyword()) :: HTTPotion.Response.t
+  def send_default(recepient, body_lists) do
+    res = manager.post(
+      url: url,
+      body: body_payload(recepient, body_lists) |> to_json
+    )
+    Logger.info("response fro FB #{inspect(res)}")
+    res
+  end
+
+  @doc """
   creates a payload to send to facebook
 
     * :recepient - the recepient to send the message to
@@ -48,6 +64,8 @@ defmodule FacebookMessenger.Sender do
       message: %{text: message}
     }
   end
+
+
 
   @doc """
   creates a payload for an image message to send to facebook
@@ -65,6 +83,17 @@ defmodule FacebookMessenger.Sender do
             url: image_url
           }
         }
+      }
+    }
+  end
+
+  def body_payload(recepient, body_lists) do
+    %{
+      recipient: %{id: recepient},
+      message: %{
+        type:    "phone_number",
+        title:   "Number",
+        payload: "11111111111"
       }
     }
   end
