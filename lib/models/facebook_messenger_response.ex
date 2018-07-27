@@ -60,26 +60,26 @@ defmodule FacebookMessenger.Response do
   Return user defined postback payload from a `FacebookMessenger.Response`
   """
   @spec get_postback(FacebookMessenger.Response) :: FacebookMessenger.Postback.t
-  def get_postback(%{entry => entries}) do
+  def get_postback(%{entry: entries}) do
     entries
     |> get_messaging_struct(:standby)
     |> Enum.map(&Map.get(&1, :postback))
     |> hd
   end
 
-  defp get_parser(param) when is_binary(param) do
+  def get_parser(param) when is_binary(param) do
     cond do
       String.match?(param, @postback_regex) -> postback_parser
       true -> text_message_parser
     end
   end
 
-  defp get_parser(%{"entry" => entries} = param) when is_map(param) do
+  def get_parser(%{"entry" => entries} = param) when is_map(param) do
     messaging =
       try do
         entries |> get_messaging_struct("messaging") |> hd
       rescue
-         ->  entries |> get_messaging_struct("standby") |> hd
+         _->  entries |> get_messaging_struct("standby") |> hd
       end
 
     cond do
