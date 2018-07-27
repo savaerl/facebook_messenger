@@ -60,10 +60,10 @@ defmodule FacebookMessenger.Response do
   Return user defined postback payload from a `FacebookMessenger.Response`
   """
   @spec get_postback(FacebookMessenger.Response) :: FacebookMessenger.Postback.t
-  def get_postback(%{"entry" => entries}) do
+  def get_postback(%{entry => entries}) do
     entries
-    |> get_messaging_struct("standby")
-    |> Enum.map(&Map.get(&1, "postback"))
+    |> get_messaging_struct(:standby)
+    |> Enum.map(&Map.get(&1, :postback))
     |> hd
   end
 
@@ -81,10 +81,6 @@ defmodule FacebookMessenger.Response do
       rescue
          ->  entries |> get_messaging_struct("standby") |> hd
       end
-      cond do
-      Map.has_key?(messaging, "postback") -> postback_parser
-      Map.has_key?(messaging, "message") -> text_message_parser
-    end
 
     cond do
       Map.has_key?(messaging, "postback") -> postback_parser
