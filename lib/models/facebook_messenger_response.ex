@@ -75,7 +75,16 @@ defmodule FacebookMessenger.Response do
   end
 
   defp get_parser(%{"entry" => entries} = param) when is_map(param) do
-    messaging = entries |> get_messaging_struct("messaging") |> hd
+    messaging =
+      try do
+        entries |> get_messaging_struct("messaging") |> hd
+      rescue
+         ->  entries |> get_messaging_struct("standby") |> hd
+      end
+      cond do
+      Map.has_key?(messaging, "postback") -> postback_parser
+      Map.has_key?(messaging, "message") -> text_message_parser
+    end
 
     cond do
       Map.has_key?(messaging, "postback") -> postback_parser
@@ -84,7 +93,6 @@ defmodule FacebookMessenger.Response do
   end
 
   defp get_messaging_struct(entries, messaging_key \\ :messaging) do
-    :io.format("~nentries2: ~p~n", [entries])
     Enum.flat_map(entries, &Map.get(&1, messaging_key))
   end
 
