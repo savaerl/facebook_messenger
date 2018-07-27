@@ -62,7 +62,7 @@ defmodule FacebookMessenger.Response do
   @spec get_postback(FacebookMessenger.Response) :: FacebookMessenger.Postback.t
   def get_postback(%{entry: entries}) do
     entries
-    |> get_messaging_struct(:standby)
+    |> get_messaging_struct()
     |> Enum.map(&Map.get(&1, :postback))
     |> hd
   end
