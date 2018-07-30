@@ -67,7 +67,7 @@ defmodule FacebookMessenger.Response do
     |> hd
   end
 
-  def attachments(%{entry: entries}) do
+  def get_attachments(%{entry: entries}) do
     entries
     |> get_messaging_struct()
     |> Enum.map(&( &1 |> Map.get(:message)
