@@ -122,7 +122,7 @@ defmodule FacebookMessenger.Response do
 
   defp attachments_parser do
     %FacebookMessenger.Messaging{
-      "type": "message",
+      "type": "attachments",
       "sender": %FacebookMessenger.User{},
       "recipient": %FacebookMessenger.User{},
       "message": %FacebookMessenger.Attachments{}
