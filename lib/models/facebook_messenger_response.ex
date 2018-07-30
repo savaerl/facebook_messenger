@@ -84,12 +84,22 @@ defmodule FacebookMessenger.Response do
 
     cond do
       Map.has_key?(messaging, "postback") -> postback_parser
-      Map.has_key?(messaging, "message") -> text_message_parser
+      Map.has_key?(messaging, "message") -> select_text_type(Map.get(messaging, "message"))
+    end
+  end
+
+  def select_text_type(messaging) do
+
+    cond do
+      Map.has_key?(messaging, "attachments") -> attachments_parser
+      true -> text_message_parser
     end
   end
 
   defp get_messaging_struct(entries, messaging_key \\ :messaging) do
-    Enum.flat_map(entries, &Map.get(&1, messaging_key))
+     x = Enum.flat_map(entries, &Map.get(&1, messaging_key))
+     :io.format("~nmes_struct: ~p~n", [x])
+     x
   end
 
   defp postback_parser do
@@ -107,6 +117,15 @@ defmodule FacebookMessenger.Response do
       "sender": %FacebookMessenger.User{},
       "recipient": %FacebookMessenger.User{},
       "message": %FacebookMessenger.Message{}
+    }
+  end
+
+  defp attachments_parser do
+    %FacebookMessenger.Messaging{
+      "type": "message",
+      "sender": %FacebookMessenger.User{},
+      "recipient": %FacebookMessenger.User{},
+      "message": %FacebookMessenger.Attachments{}
     }
   end
 
