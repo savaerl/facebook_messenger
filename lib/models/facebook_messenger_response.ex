@@ -67,6 +67,13 @@ defmodule FacebookMessenger.Response do
     |> hd
   end
 
+  def attachments(%{entry: entries}) do
+    entries
+    |> get_messaging_struct()
+    |> Enum.map(&( &1 |> Map.get(:message)
+                   |> Map.get(:attachments)))
+  end
+
   def get_parser(param) when is_binary(param) do
     cond do
       String.match?(param, @postback_regex) -> postback_parser
