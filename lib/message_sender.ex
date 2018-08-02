@@ -36,6 +36,15 @@ defmodule FacebookMessenger.Sender do
     res
   end
 
+  @spec send_code(String.t, Map.t()) :: HTTPotion.Response.t
+  def send_code(recepient, body_map) do
+    res = manager.post(
+      url: url_code(),
+      body: body_map |> to_json
+    )
+    Logger.info("response fro FB #{inspect(res)}")
+    res
+  end
   @doc """
   sends a default messages to the recipient
 
@@ -112,6 +121,12 @@ defmodule FacebookMessenger.Sender do
     query = "access_token=#{page_token}"
     "https://graph.facebook.com/v2.6/me/messages?#{query}"
   end
+
+  def url_code() do
+    query = "access_token=#{page_token}"
+    "https://graph.facebook.com/v2.6/me/messenger_codes?#{query}"
+  end
+
 
   defp page_token do
     Application.get_env(:facebook_messenger, :facebook_page_token)
