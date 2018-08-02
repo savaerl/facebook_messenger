@@ -16,7 +16,7 @@ defmodule FacebookMessenger.Sender do
       url: url,
       body: text_payload(recepient, message) |> to_json
     )
-    Logger.info("response from FB #{inspect(res)}")
+    Logger.info("SEND BODY~nResponse from FB: #{inspect(res)}")
     res
   end
 
@@ -32,7 +32,7 @@ defmodule FacebookMessenger.Sender do
       url: url,
       body: image_payload(recepient, image_url) |> to_json
     )
-    Logger.info("response fro FB #{inspect(res)}")
+    Logger.info("SEND IMAGE~nResponse from FB: #{inspect(res)}")
     res
   end
 
@@ -42,7 +42,7 @@ defmodule FacebookMessenger.Sender do
       url: url_code(),
       body: body_map |> to_json
     )
-    Logger.info("response fro FB #{inspect(res)}")
+    Logger.info("SEND CODE~nResponse from FB: #{inspect(res)}")
     res
   end
   @doc """
@@ -57,7 +57,7 @@ defmodule FacebookMessenger.Sender do
       url: url,
       body: body_payload(recepient, body_map) |> to_json
     )
-    Logger.info("response fro FB #{inspect(res)}")
+    Logger.info("SEND DEFAULT~nResponse fro FB: #{inspect(res)}")
     res
   end
 

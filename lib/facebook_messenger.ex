@@ -17,8 +17,6 @@ defmodule FacebookMessenger do
                         "hub.verify_token" => token,
                         "hub.challenge" => in_challenge} = params) do
 
-    Logger.info "token #{token}"
-    Logger.info "verify_token #{verify_token}"
     mode = check_on_space(in_mode)
     challenge = check_on_space(in_challenge)
     case mode == "subscribe" do
