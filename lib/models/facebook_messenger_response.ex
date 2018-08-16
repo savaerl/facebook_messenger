@@ -104,9 +104,7 @@ defmodule FacebookMessenger.Response do
   end
 
   defp get_messaging_struct(entries, messaging_key \\ :messaging) do
-     x = Enum.flat_map(entries, &Map.get(&1, messaging_key))
-     :io.format("~nmes_struct: ~p~n", [x])
-     x
+     Enum.flat_map(entries, &Map.get(&1, messaging_key))
   end
 
   defp postback_parser do
